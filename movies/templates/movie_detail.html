@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="movie-detail-container">
+    <div class="movie-detail-poster">
+        <img src="{{ MEDIA_URL }}{{ movie.poster }}">
+    </div>
+
+  <div class="movie-detail-information">
+
+      <br>{{ movie.title }}
+
+      {% if movie.description %}
+      <br>{{ movie.description }}
+      {% endif %}
+
+      {% if movie.director %}
+      <br>Directors:
+        &#11088;
+        {{ movie.director }} &#11088;
+      {% endif %}
+
+      {% if movie.actors.all %}
+      <br>Actors:
+       &#11088;
+      {% for actor in movie.actors.all %}
+        {{ actor.name }} &#11088;
+      {% endfor %}
+      {% endif %}
+
+      {% if movie.genre %}
+       <br>Genre:
+      {{ movie.genre }}
+      {% endif %}
+
+      {% if movie.rating %}
+      <br>Rating: {{ movie.rating }}
+      {% endif %}
+  </div>
+</div>
+<div class="comment-area">
+    {% if request.user.is_authenticated %}
+    {% if not movie.commented %}
+    <form method="post">
+        {% csrf_token %}
+        <ul style="list-style-type: none; align-items: center;">
+            {% for field in form %}
+            <li>{{ field }}</li>
+            {% endfor %}
+            <li><input type="submit" value="Send a comment" style="width: 20%; margin-left: 5%;"></li>
+        </ul>
+    </form>
+    {% endif %}
+    {% endif %}
+
+    {% if movie.comment_set.all %}
+
+        {% for comment in movie.comment_set.all %}
+            <b>{{ comment.author }}</b><br>
+            {{ comment.get_rate_display }}<br>
+            {{ comment.text }}<br>
+        {% endfor %}
+
+    {% endif %}
+
+</div>
+{% endblock content %}

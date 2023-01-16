@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'css/auth_styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+<nav class="navbar">
+        <ul class="nav-list">
+            <li>Cinema</li>
+            <li><a href="{% url 'movies:movie_list' %}">ALL Movies</a></li>
+            {% if request.user.is_authenticated %}
+            <li><a href="#">Recommended</a></li>
+            {% endif %}
+        </ul>
+
+        <div class="nav-auth">
+            <ul class="nav-list">
+                {% if request.user.is_authenticated %}
+                <li>{{ request.user.username }}</li>
+                <li>|</li>
+                <li><a href="{% url 'authentication:logout' %}">Logout</a></li>
+                <li>|</li>
+                <li><a href="{% url 'authentication:password_change' %}">Password Change</a></li>
+                {% else %}
+                <li><a href="{% url 'authentication:sign_in' %}">Sign In</a></li>
+                <li><a href="{% url 'authentication:sign_up' %}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-container">
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </div>
+
+</body>
+</html>

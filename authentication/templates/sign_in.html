@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Sign In</title>
-</head>
-<body>
+{% extends 'auth_base.html' %}
+
+{% block content %}
+
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
@@ -20,9 +17,13 @@
 
 <form method="post">
 {% csrf_token %}
-{{ form }}
-<input type="submit" value="login">
+    <ul>
+        {% for field in form %}
+            <li>{{ field }}</li>
+        {% endfor %}
+    </ul>
+<input type="submit" value="Sign In">
 <input type="hidden" name="next" value="{{ request.GET.next }}">
 </form>
-</body>
-</html>
+
+{% endblock content %}

@@ -101,7 +101,7 @@ class SignInViewTestCase(TestCase):
         self.assertRedirects(response, '/auth/')
 
         response = self.client.get('/auth/')
-        self.assertContains(response, data['username'])
+        self.assertEqual(response.context['user'].email, data['username'])
 
     def test_required_fields(self):
         response = self.client.post('/auth/sign-in/', {})
