@@ -1,6 +1,6 @@
 from django import forms
-from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.forms.utils import ErrorList
 
 from authentication.models import User
 from django.forms.widgets import HiddenInput
@@ -30,8 +30,8 @@ class MovieCommentForm(forms.Form):
 
     def is_valid(self):
         if super().is_valid():
-            self.create_comment()
-            return True
+            if self.create_comment():
+                return True
 
         return False
 
@@ -47,5 +47,23 @@ class MovieCommentForm(forms.Form):
                 rate=self.cleaned_data.get('rate')
             )
         except ValidationError:
-            if settings.DEBUG:
-                raise ValidationError('Comment with this author and movie already exists')
+            self._errors['movie_and_user_unique'] = ErrorList(
+                [u'Comment with this author and movie already exists.']
+            )
+            return False
+
+        return True
+
+    def clean_user_pk(self):
+        user_pk = self.cleaned_data['user_pk']
+        if not User.objects.filter(pk=user_pk).exists():
+            raise ValidationError('Invalid user_pk.')
+
+        return user_pk
+
+    def clean_movie_pk(self):
+        movie_pk = self.cleaned_data['movie_pk']
+        if not Movie.objects.filter(pk=movie_pk).exists():
+            raise ValidationError('Invalid movie_pk.')
+
+        return movie_pk

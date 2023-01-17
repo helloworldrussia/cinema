@@ -87,7 +87,7 @@ class MovieDetailViewTestCase(TestCase):
             author=self.user_1, movie=self.movie
         )
 
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(len(user_comments), 1)
 
     def test_db_queries_count(self):
