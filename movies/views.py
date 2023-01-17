@@ -18,6 +18,7 @@ class MovieListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        print(self.request.GET)
         filtered = MovieFilterSet(self.request.GET, queryset)
 
         return filtered.qs

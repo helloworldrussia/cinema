@@ -1,11 +1,11 @@
 from django.db.models import Q
-from django_filters import FilterSet, CharFilter, Filter
+from django_filters import FilterSet, Filter
 
 from movies.models import Movie
 
 
 class MovieFilterSet(FilterSet):
-    search = CharFilter(method='filter_search')
+    search = Filter(method='filter_search')
     genres = Filter(method='filter_genres')
 
     class Meta:
@@ -26,4 +26,4 @@ class MovieFilterSet(FilterSet):
         ).distinct()
 
     def filter_genres(self, queryset, name, value):
-        return queryset.filter(genre=value)
+        return queryset.filter(genre__in=value)

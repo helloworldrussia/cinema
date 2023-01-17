@@ -21,75 +21,98 @@ class MovieFilterSetTestCase(TestCase):
 
         cls.movie_1 = Movie.objects.create(
             description='Увлекательная комендия о человеке и камне',
-            title='Скала'
+            title='Скала',
+            director=cls.director_1,
+            genre=cls.genre_1
         )
-        cls.movie_1.directors.set([cls.director_1.pk, cls.director_3.pk])
-        cls.movie_1.actors.add(cls.actor_2.pk)
-        cls.movie_1.genres.add(cls.genre_1.pk)
+        cls.movie_1.actors.add(cls.actor_1.pk)
 
         cls.movie_2 = Movie.objects.create(
             description='Всеми любимый фильм в новом жанре',
-            title='Скала 2'
+            title='Скала 2',
+            director=cls.director_2,
+            genre=cls.genre_2
         )
-        cls.movie_2.directors.add(cls.director_2.pk)
-        cls.movie_2.actors.set([cls.actor_1.pk, cls.actor_3.pk])
-        cls.movie_2.genres.add(cls.genre_2.pk)
+        cls.movie_2.actors.add(cls.actor_2)
 
         cls.movie_3 = Movie.objects.create(
             description='Охота. Скала. Добыча.',
-            title='Охотник'
+            title='Охотник',
+            director=cls.director_3,
+            genre=cls.genre_3
         )
-        cls.movie_3.directors.add(cls.director_3.pk)
-        cls.movie_3.actors.add(cls.actor_3.pk)
-        cls.movie_3.genres.set([cls.genre_1.pk, cls.genre_3.pk])
+        cls.movie_3.actors.add(cls.actor_1, cls.actor_3.pk)
+
+        cls.movie_4 = Movie.objects.create(
+            description='Тестовое описание',
+            title='Фильм Аутсайдер'
+        )
 
     def test_search_filter(self):
         search_query = 'Скала'
-        queryset = Movie.objects.all()
+        queryset = [self.movie_1, self.movie_2, self.movie_3]
         filtered = MovieFilterSet({'search': search_query})
 
-        self.assertEqual(list(filtered.qs), list(queryset))
+        self.assertEqual(list(filtered.qs), queryset)
 
-    def test_actors_filter(self):
-        actors_query = [self.actor_1.pk, self.actor_3.pk]
+        search_query = self.actor_1.name
+        queryset = [self.movie_1, self.movie_3]
+        filtered = MovieFilterSet({'search': search_query})
 
-        filtered = MovieFilterSet(
-            {'actors': actors_query}
-        )
+        self.assertEqual(list(filtered.qs), queryset)
 
-        expected_data = [self.movie_2, self.movie_3]
-        self.assertEqual(list(filtered.qs), expected_data)
+        search_query = self.director_1.name
+        filtered = MovieFilterSet({'search': search_query})
+        queryset = [self.movie_1]
 
-    def test_directors_filter(self):
-        directors_query = [self.director_1.pk, self.director_3.pk]
-
-        filtered = MovieFilterSet(
-            {'directors': directors_query}
-        )
-
-        expected_data = [self.movie_1, self.movie_3]
-        self.assertEqual(list(filtered.qs), expected_data)
+        self.assertEqual(list(filtered.qs), queryset)
 
     def test_genres_filter(self):
         genres_query = [self.genre_1.pk, self.genre_3.pk]
 
         filtered = MovieFilterSet(
-            {'directors': genres_query}
+            {'genres': genres_query}
         )
 
         expected_data = [self.movie_1, self.movie_3]
         self.assertEqual(list(filtered.qs), expected_data)
 
-    def comprehensive_filter_test(self):
+        genres_query = [self.genre_1.pk]
+
+        filtered = MovieFilterSet(
+            {'genres': genres_query}
+        )
+
+        expected_data = [self.movie_1]
+        self.assertEqual(list(filtered.qs), expected_data)
+
+    def test_comprehensive_filter(self):
         filters = {
-            'actors': [self.actor_3.pk],
-            'directors': [self.director_3.pk],
-            'genres': [self.genre_1.pk, self.genre_3.pk],
-            'search': 'Добыча'
+            'genres': [self.genre_3.pk, self.genre_2.pk],
+            'search': self.director_2.name
         }
 
         filtered = MovieFilterSet(filters)
+        expected_data = [self.movie_2]
 
-        expected_data = [self.movie_3]
+        self.assertEqual(list(filtered.qs), expected_data)
+
+        filters = {
+            'genres': [self.genre_1, self.genre_2.pk, self.genre_3],
+            'search': self.actor_1.name
+        }
+
+        expected_data = [self.movie_1, self.movie_3]
+        filtered = MovieFilterSet(filters)
+
+        self.assertEqual(list(filtered.qs), expected_data)
+
+        filters = {
+            'genres': [self.genre_1.pk],
+            'search': '2'
+        }
+
+        filtered = MovieFilterSet(filters)
+        expected_data = []
 
         self.assertEqual(list(filtered.qs), expected_data)
