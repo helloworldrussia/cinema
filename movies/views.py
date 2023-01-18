@@ -107,7 +107,7 @@ class MovieView(View):
         return view(request, *args, **kwargs)
 
 
-class SuggestionsMoviesView(BaseMovieListView, BaseSuggestionsView):
+class SuggestionsMoviesView(BaseSuggestionsView, BaseMovieListView):
     recommender = MovieRecommender()
 
     def get_queryset(self):

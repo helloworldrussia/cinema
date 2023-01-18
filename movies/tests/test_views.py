@@ -10,6 +10,12 @@ from movies.models import Movie, Comment
 class MovieListViewTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
+        cls.user = User.objects.create_user(
+            email='mail@mail.ru',
+            username='test_user',
+            password='PassWord!'
+        )
+
         cls.url = reverse('movies:movie_list')
 
     def test_ok(self):
@@ -97,6 +103,37 @@ class MovieDetailViewTestCase(TestCase):
             self.assertEqual(6, len(queries))
 
         self.client.logout()
+        with CaptureQueriesContext(connection) as queries:
+            self.client.get(self.url)
+            self.assertEqual(4, len(queries))
+
+
+class SuggestionsMoviesViewTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user(
+            email='mail@mail.ru',
+            username='test_user',
+            password='PassWord!'
+        )
+
+        cls.url = reverse('movies:suggestions')
+
+    def test_ok(self):
+        self.client.force_login(self.user)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'movie_list.html')
+
+    def test_deny_anonymous(self):
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            reverse('authentication:sign_in') + '?next=' + self.url
+        )
+
+    def test_db_queries_count(self):
+        self.client.force_login(self.user)
         with CaptureQueriesContext(connection) as queries:
             self.client.get(self.url)
             self.assertEqual(4, len(queries))
