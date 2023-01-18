@@ -8,6 +8,7 @@ from django.views.generic.detail import SingleObjectMixin
 from authentication.models import User
 from movies.filters import MovieFilterSet
 from movies.forms import MovieFilterSearchForm, MovieCommentForm
+from movies.mixins import BaseSuggestionsView, MovieRecommender
 from movies.models import Movie
 
 
@@ -29,7 +30,6 @@ class MovieListView(BaseMovieListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        print(self.request.GET)
         filtered = MovieFilterSet(self.request.GET, queryset)
 
         return filtered.qs
@@ -107,48 +107,13 @@ class MovieView(View):
         return view(request, *args, **kwargs)
 
 
-class SuggestionsMoviesView(BaseMovieListView):
+class SuggestionsMoviesView(BaseMovieListView, BaseSuggestionsView):
+    recommender = MovieRecommender()
 
     def get_queryset(self):
-        filters, viewed_pks = self.get_suggestions_filters()
+        if hasattr(self.recommender, 'user'):
+            self.recommender.user = self.request.user
 
-        queryset = Movie.objects.exclude(
-            pk__in=viewed_pks
-        ).filter(filters).distinct()
-
-        if not queryset:
-            queryset = Movie.objects.all()
+        queryset = self.recommender.get_suggestions()
 
         return queryset
-
-    def get_suggestions_filters(self):
-        filters_params, viewed_pks = self.get_filters_params()
-        filters = Q(
-            actors__in=filters_params['actors']
-        ) | Q(
-            genre__in=filters_params['genre']
-        ) | Q(
-            director__in=filters_params['director']
-        )
-
-        return filters, viewed_pks
-
-    def get_filters_params(self):
-        params = {}
-
-        queryset = Movie.objects.filter(
-            comment__author=self.request.user,
-            comment__rate__gt=3
-        ).select_related(
-            'genre', 'director'
-        ).prefetch_related(
-            'actors'
-        )
-
-        params['actors'] = queryset.values_list('actors', flat=True)
-        params['genre'] = queryset.values_list('genre', flat=True)
-        params['director'] = queryset.values_list('director', flat=True)
-
-        viewed_pks = queryset.values_list('pk', flat=True)
-
-        return params, viewed_pks
