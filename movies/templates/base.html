@@ -12,7 +12,7 @@
             <li>Cinema</li>
             <li><a href="{% url 'movies:movie_list' %}">ALL Movies</a></li>
             {% if request.user.is_authenticated %}
-            <li><a href="#">Recommended</a></li>
+            <li><a href="{% url 'movies:suggestions' %}">Recommended</a></li>
             {% endif %}
         </ul>
 

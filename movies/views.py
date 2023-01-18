@@ -1,4 +1,4 @@
-from django.db.models import Avg, Case, When, Value, IntegerField, Count, Prefetch
+from django.db.models import Avg, Case, When, Value, IntegerField, Count, Prefetch, Q
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views import View
@@ -11,7 +11,18 @@ from movies.forms import MovieFilterSearchForm, MovieCommentForm
 from movies.models import Movie
 
 
-class MovieListView(ListView):
+class BaseMovieListView(ListView):
+    template_name = 'movie_list.html'
+    context_object_name = 'movies'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = MovieFilterSearchForm
+
+        return context
+
+
+class MovieListView(BaseMovieListView):
     queryset = Movie.objects.values('pk', 'title', 'poster')
     template_name = 'movie_list.html'
     context_object_name = 'movies'
@@ -22,12 +33,6 @@ class MovieListView(ListView):
         filtered = MovieFilterSet(self.request.GET, queryset)
 
         return filtered.qs
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = MovieFilterSearchForm
-
-        return context
 
 
 class MovieDetailView(DetailView):
@@ -100,3 +105,50 @@ class MovieView(View):
     def post(self, request, *args, **kwargs):
         view = MovieCommentFormView.as_view()
         return view(request, *args, **kwargs)
+
+
+class SuggestionsMoviesView(BaseMovieListView):
+
+    def get_queryset(self):
+        filters, viewed_pks = self.get_suggestions_filters()
+
+        queryset = Movie.objects.exclude(
+            pk__in=viewed_pks
+        ).filter(filters).distinct()
+
+        if not queryset:
+            queryset = Movie.objects.all()
+
+        return queryset
+
+    def get_suggestions_filters(self):
+        filters_params, viewed_pks = self.get_filters_params()
+        filters = Q(
+            actors__in=filters_params['actors']
+        ) | Q(
+            genre__in=filters_params['genre']
+        ) | Q(
+            director__in=filters_params['director']
+        )
+
+        return filters, viewed_pks
+
+    def get_filters_params(self):
+        params = {}
+
+        queryset = Movie.objects.filter(
+            comment__author=self.request.user,
+            comment__rate__gt=3
+        ).select_related(
+            'genre', 'director'
+        ).prefetch_related(
+            'actors'
+        )
+
+        params['actors'] = queryset.values_list('actors', flat=True)
+        params['genre'] = queryset.values_list('genre', flat=True)
+        params['director'] = queryset.values_list('director', flat=True)
+
+        viewed_pks = queryset.values_list('pk', flat=True)
+
+        return params, viewed_pks

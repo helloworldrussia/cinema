@@ -9,7 +9,7 @@ class BaseMovieDetail(models.Model):
         abstract = True
 
     def __str__(self):
-        return self.name
+        return f'{self.pk} | {self.name}'
 
 
 class Director(BaseMovieDetail):
