@@ -1,0 +1,17 @@
+{% extends 'auth_base.html' %}
+
+{% block content %}
+
+<form method="post">
+{% csrf_token %}
+    <ul>
+        {% for field in form %}
+            <li>{{ field.label }}</li>
+            <li>{{ field }}</li>
+        {% endfor %}
+    </ul>
+<input type="submit" value="Sign Up">
+<input type="hidden" name="next" value="{{ next }}">
+</form>
+
+{% endblock content %}

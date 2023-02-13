@@ -1,0 +1,36 @@
+services:
+  web-app:
+    build:
+      context: .
+    volumes:
+      - ./app:/app
+      - static_volume:/app/staticfiles
+    environment:
+      - DB_HOST=database
+      - DB_NAME=dbname
+      - DB_USER=dbuser
+      - DB_PASS=pass
+    command: >
+      sh -c "gunicorn app.wsgi:application --bind 0.0.0.0:8000"
+    depends_on:
+      - database
+
+  database:
+    image: postgres:14.6-alpine
+    environment:
+      - POSTGRES_DB=dbname
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=pass
+
+  nginx:
+    image: nginx:1.21-alpine
+    ports:
+      - 80:80
+    volumes:
+      - static_volume:/app/staticfiles
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - web-app
+
+volumes:
+  static_volume:

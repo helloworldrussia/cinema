@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Movies{% endblock title %}
+
+{% block content %}
+
+    <div class="filter-search-form">
+        <form method="get" action="{% url 'movies:movie_list' %}">
+            {{ form.search }}
+            {{ form.genres }}
+            <input type="submit" value="SEARCH" class="filter-search-form-btn">
+        </form>
+    </div>
+    <div class="product-table">
+
+{% if movies %}
+    {% for movie in movies %}
+
+            <a class="product-card" href="{% url 'movies:movie_detail' movie.pk %}">
+                    <img src="{{ MEDIA_URL }}{{ movie.poster }}">
+                <div class="product-panel">
+                    <p>{{ movie.title }}</p>
+                </div>
+
+            </a>
+
+    {% endfor %}
+
+    </div>
+{% endif %}
+
+{% endblock content %}

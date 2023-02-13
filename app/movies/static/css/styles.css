@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Koulen&display=swap');
+body {
+    font-size: 16px;
+    font-family: 'Koulen', cursive;
+    font-weight: normal;
+    background-color: #F8F4FF;
+    color: black;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    max-height: 90%;
+}
+
+.navbar > ul {padding: 0; margin: 0;}
+
+.navbar {
+    position: -webkit-sticky;
+    position: absolute;
+    display: flex;
+    /*position: fixed;*/
+    width: 100%;
+    height: 10%;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: lightcoral;
+    color: white;
+}
+
+.nav-list {
+    display: flex;
+}
+
+.nav-list > li {
+    margin-left: 10px;
+    margin-top: 13px;
+    font-decoration: none;
+    margin-right: 1%;
+    list-style-type: none;
+    font-size: 20px;
+    font-weight: 550;
+    padding-left: 0;
+    border-left: 0;
+    white-space: nowrap;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    color: grey;
+}
+
+.nav-list > li:child-last {
+    margin-right: 0;
+}
+
+.nav-auth {
+    margin-top: -1.25%;
+    margin-left: 40%;
+    margin-right: 2%;
+}
+
+.search-input > input {
+    border: 0;
+    border-radius: 13px 13px 13px 13px;
+    /* border-radius: 30%; */
+    outline: none;
+    height: 60%;
+    width: 100%;
+    padding-left: 10px;
+}
+.filter-search-form {
+    margin-top 100px;
+    text-align: center;
+    margin-left: -6%;
+    padding: 2%;
+}
+
+.filter-search-form > form > input[type="text"] {
+    width: 40%;
+    height: 26px;
+    border: 2px solid lightcoral;
+}
+
+.filter-search-form > form > select {
+    height: 30px;
+    border: 2px solid lightcoral;
+    color: lightcoral;
+}
+
+.filter-search-form-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12%;
+    border: None;
+    margin-left: 44%;
+
+    font-size: 20px;
+    font-family: 'Koulen', cursive;
+    font-weight: normal;
+    background-color: #F8F4FF;
+    color: lightcoral;
+    cursor: pointer;
+}
+
+.filter-search-form-btn:hover {
+    font-weight: bold;
+}
+
+.filter-search-form-btn:active {
+    color: grey;
+}
+
+.filter-search-form > form {
+    color: black;
+    font-size: 18px;
+}
+
+.container {
+    /* background: black;*/
+    width: 88%;
+    min-height: 380px;
+    margin-top: 5%;
+    margin-left: 5%;
+    color: white;
+}
+
+.product-table {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+}
+
+.product-card {
+    display: block;
+    position: relative;
+    text-align: center;
+    width: 20%;
+    height: 20%;
+    border-radius: 10%;
+    background-color: white;
+    margin: 2%;
+    box-shadow: 6px 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.bg-pic {
+    width: 100%;
+    height: 100%;
+}
+
+.product-card > img {
+    border-radius: 10%;
+    object-fit: cover;
+    width: 250px;
+    height: 250px;
+}
+
+.product-panel {
+    text-align: center;
+    width: 100%;
+    height: 20%;
+    position: absolute;
+    bottom: 0;
+    background: white;
+    border-radius: 0 0 10px 10px;
+
+}
+
+.product-panel > p {
+    text-align: center;
+    color: black;
+    margin-top: -1%;
+}
+
+.btn-product {
+    background: transparent;
+    margin-bottom: 10px;
+    border-radius: 50px;
+    margin-left: 50%;
+    border: 2px solid green;
+    color: green;
+    cursor: pointer;
+}
+
+.btn-product:hover {
+    background: green;
+    border-color: green;
+    color: white;
+}
+
+.btn-product:active {
+    background: black;
+    border-color: black;
+    color: white;
+}
+
+.cat-group {
+    height: 4%;
+}
+
+.cat-list {
+    position: fixed;
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin-left: 50px;
+}
+
+.btn-cat {
+	width: 45px;
+	height: 30px;
+	-webkit-transform: skew(-20deg);
+	   -moz-transform: skew(-20deg);
+	     -o-transform: skew(-20deg);
+	background: #d7d7d7;
+	margin-right: 10px;
+	border: none;
+	cursor: pointer;
+}
+
+.btn-cat:hover {
+    background: grey;
+}
+
+.btn-cat:active {
+    background: #8a8a8a;
+}
+
+footer p {
+    text-align: right;
+}
+
+.movie-detail-container {
+    display: flex;
+    text-align: center;
+    height: 500px;
+}
+
+.movie-detail-information {
+    width: 50%;
+    height: 50%;
+    color: black;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    width: 50%;
+    height: 100%;
+}
+
+.movie-detail-poster {
+    width: 50%;
+    height: 100%;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+
+}
+
+.movie-detail-poster img{
+    object-fit: contain;
+}
+
+.comment-area {
+    color: black;
+}
