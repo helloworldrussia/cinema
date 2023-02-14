@@ -1,6 +1,9 @@
 {% extends 'auth_base.html' %}
 
-{% block content %}
+{% block title %}Sign Up{% endblock title %}
+
+
+{% block form-content %}
 
 <form method="post">
 {% csrf_token %}
@@ -14,4 +17,4 @@
 <input type="hidden" name="next" value="{{ next }}">
 </form>
 
-{% endblock content %}
+{% endblock form-content %}

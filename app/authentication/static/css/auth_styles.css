@@ -1,14 +1,10 @@
-
-.container {
-    border: 2px solid #F8F4FF;
-    align-items: center;
-    margin: 15%;
+.form-container {
+    margin-top: 7%;
+    text-align: center;
 }
 
-.form-container {
-    border: 2px solid #F8F4FF;
-    margin: 10%;
-    text-align: center;
+li {
+    list-style-type: none;
 }
 
 form {
@@ -39,10 +35,4 @@ input[type="submit"]:hover {
 
 input[type="submit"]:active {
     color: grey;
-}
-
-ul {
-    list-style-type: none;
-    margin-left: 0;
-    padding-left: 0;
 }
