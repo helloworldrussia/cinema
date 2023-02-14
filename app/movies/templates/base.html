@@ -5,19 +5,22 @@
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock title %}</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
 </head>
 <body>
     <nav class="navbar">
-        <ul class="nav-list">
-            <li>Cinema</li>
-            <li><a href="{% url 'movies:movie_list' %}">ALL Movies</a></li>
-            {% if request.user.is_authenticated %}
-            <li><a href="{% url 'movies:suggestions' %}">Recommended</a></li>
-            {% endif %}
-        </ul>
+        <div class="nav-pages">
+            <ul class="nav-list">
+                <li>Cinema</li>
+                <li><a href="{% url 'movies:movie_list' %}">ALL Movies</a></li>
+                {% if request.user.is_authenticated %}
+                <li><a href="{% url 'movies:suggestions' %}">Recommended</a></li>
+                {% endif %}
+            </ul>
+        </div>
 
         <div class="nav-auth">
-            <ul class="nav-list">
+            <ul class="nav-list nav-list-right">
                 {% if request.user.is_authenticated %}
                 <li>{{ request.user.username }}</li>
                 <li>|</li>

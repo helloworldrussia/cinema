@@ -7,6 +7,14 @@ body {
     color: black;
 }
 
+.container {
+    width: 88%;
+    min-height: 600px;
+    margin-top: 5%;
+    margin-left: 5%;
+    color: white;
+}
+
 img {
     display: block;
     max-width: 100%;
@@ -29,21 +37,43 @@ img {
     color: white;
 }
 
+.navbar > div {
+    display: table-cell;
+    vertical-align: middle;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.nav-pages > ul {
+    float: left;
+    width: 80%;
+}
+
+.nav-auth > ul{
+    float: right;
+    width: 80%;
+    direction: ltr;
+    unicode-bidi: embed;
+}
+
 .nav-list {
-    display: flex;
+    display: inline-block;
 }
 
 .nav-list > li {
-    margin-left: 10px;
-    margin-top: 13px;
+    display: inline;
     font-decoration: none;
     margin-right: 1%;
     list-style-type: none;
-    font-size: 20px;
+    font-size: 23px;
     font-weight: 550;
     padding-left: 0;
     border-left: 0;
     white-space: nowrap;
+}
+
+.nav-list-right {
+    text-align: right;
 }
 
 a {
@@ -61,12 +91,6 @@ a:active {
 
 .nav-list > li:child-last {
     margin-right: 0;
-}
-
-.nav-auth {
-    margin-top: -1.25%;
-    margin-left: 40%;
-    margin-right: 2%;
 }
 
 .search-input > input {
@@ -95,6 +119,7 @@ a:active {
     height: 30px;
     border: 2px solid lightcoral;
     color: lightcoral;
+    font-weight: bolder;
 }
 
 .filter-search-form-btn {
@@ -124,15 +149,6 @@ a:active {
 .filter-search-form > form {
     color: black;
     font-size: 18px;
-}
-
-.container {
-    /* background: black;*/
-    width: 88%;
-    min-height: 380px;
-    margin-top: 5%;
-    margin-left: 5%;
-    color: white;
 }
 
 .product-table {
